@@ -16,15 +16,15 @@ jobs:
     
     - uses: Azure/docker-login@v1
       with:
-        login-server: tipsandtrickscontainerregistry.azurecr.io
+        login-server: ${{ ACR_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: docker push tipsandtrickscontainerregistry.azurecr.io/tipsandtrickscontainer:${{ github.sha }}       
 
-    - name: Post logs to appinsights
-      uses: Azure/publish-security-assessments@v0
-      with: 
-        scan-results-path: ${{ steps.container-scan.outputs.scan-report-path }}
-        connection-string: ${{ secrets.AZ_APPINSIGHTS_CONNECTION_STRING }}
-        subscription-token: ${{ secrets.AZ_SUBSCRIPTION_TOKEN }}                 
+   - name: Scan image
+      uses: Azure/container-scan@v0
+      with:
+        image-name: ${{ secrets.ACR_LOGIN_SERVER }}/spring-petclinic:${{ github.run_number }}
+        severity-threshold: CRITICAL
+        run-quality-checks: true
