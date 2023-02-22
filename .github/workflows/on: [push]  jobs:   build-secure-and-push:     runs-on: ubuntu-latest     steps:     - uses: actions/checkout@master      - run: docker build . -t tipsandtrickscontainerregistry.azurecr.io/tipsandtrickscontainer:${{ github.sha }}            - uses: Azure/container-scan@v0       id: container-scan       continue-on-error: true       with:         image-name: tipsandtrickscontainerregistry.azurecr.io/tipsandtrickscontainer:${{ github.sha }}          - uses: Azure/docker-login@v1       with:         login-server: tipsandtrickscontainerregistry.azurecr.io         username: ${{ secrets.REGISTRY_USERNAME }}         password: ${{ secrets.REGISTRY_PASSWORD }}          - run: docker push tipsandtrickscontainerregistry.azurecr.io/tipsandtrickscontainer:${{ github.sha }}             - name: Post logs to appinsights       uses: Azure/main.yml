@@ -16,13 +16,13 @@ jobs:
     
     - uses: Azure/docker-login@v1
       with:
-        login-server: ${{ ACR_LOGIN_SERVER }}
+        login-server: ${{ secrets.ACR_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: docker push tipsandtrickscontainerregistry.azurecr.io/tipsandtrickscontainer:${{ github.sha }}       
 
-   - name: Scan image
+    - name: Scan image
       uses: Azure/container-scan@v0
       with:
         image-name: ${{ secrets.ACR_LOGIN_SERVER }}/spring-petclinic:${{ github.run_number }}
