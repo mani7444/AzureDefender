@@ -22,7 +22,7 @@ jobs:
     
     - run: docker push tipsandtrickscontainerregistry.azurecr.io/tipsandtrickscontainer       
 
-   - name: Scan image
+    - name: Scan image
       uses: Azure/container-scan@v0
       with:
         image-name: ${{ secrets.ACR_LOGIN_SERVER }}/spring-petclinic:${{ github.run_number }}
