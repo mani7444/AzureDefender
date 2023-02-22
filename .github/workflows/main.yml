@@ -6,7 +6,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - run: docker build . -t containerscandemo.azurecr.io/tipsandtrickscontainer
+    - run: docker build . -t containerscandemo.azurecr.io/tipsandtrickscontainer && docker images && docker ps
       
     - uses: Azure/container-scan@v0
       id: container-scan
@@ -25,6 +25,6 @@ jobs:
     - name: Scan image
       uses: Azure/container-scan@v0
       with:
-        image-name: ${{ secrets.ACR_LOGIN_SERVER }}/containerscandemo.azurecr.io/tipsandtrickscontainer:${{ github.run_number }}
+        image-name: ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
         severity-threshold: CRITICAL
         run-quality-checks: true
