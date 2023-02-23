@@ -1,22 +1,26 @@
 on: [push]
 
-name: Container Scan
-
 jobs:
-  build-image:
+  build-secure-and-push:
     runs-on: ubuntu-latest
     steps:
-    - name: Login to the Container Registry  
-      uses: azure/docker-login@v1
+    - uses: actions/checkout@master
+
+    - run: docker build . -t containerscandemo.azurecr.io/tipsandtrickscontainer && docker images && docker ps
+      
+    - uses: Azure/container-scan@v0
+      id: container-scan
+      continue-on-error: true
+      with:
+        image-name: containerscandemo.azurecr.io/tipsandtrickscontainer
+    
+    - uses: Azure/docker-login@v1
       with:
         login-server: ${{ secrets.ACR_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-  
-    - name: Build and Tag image
-      run: |
-        docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer -f ./Dockerfile.txt .
-        
+    
+    - run: docker push containerscandemo.azurecr.io/tipsandtrickscontainer       
 
     - name: Scan image
       uses: Azure/container-scan@v0
@@ -24,8 +28,3 @@ jobs:
         image-name: ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
         severity-threshold: CRITICAL
         run-quality-checks: true
-
-    - name: Push image
-      run: |
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
-        
