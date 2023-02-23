@@ -15,7 +15,7 @@ jobs:
   
     - name: Build and Tag image
       run: |
-        docker build . -t containerscandemo.azurecr.io/tipsandtrickscontainer:${{ github.run_number }} .
+        docker build . -t containerscandemo.azurecr.io/tipsandtrickscontainer
 
     - name: Scan image
       uses: Azure/container-scan@v0
