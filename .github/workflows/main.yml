@@ -14,7 +14,8 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
   
     - name: Build and Tag image
-    -  run: docker build . -t containerscandemo.azurecr.io/tipsandtrickscontainer
+      run: |
+        docker build -f ./Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }} .
         
 
     - name: Scan image
@@ -25,5 +26,6 @@ jobs:
         run-quality-checks: true
 
     - name: Push image
-    - run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
+      run: |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
         
