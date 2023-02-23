@@ -13,8 +13,7 @@ jobs:
       continue-on-error: true
       with:
         image-name: ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
-        severity-threshold: CRITICAL
-        run-quality-checks: true
+        
 
     
     - uses: Azure/docker-login@v1
