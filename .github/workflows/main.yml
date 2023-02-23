@@ -12,7 +12,10 @@ jobs:
       id: container-scan
       continue-on-error: true
       with:
-        image-name: containerscandemo.azurecr.io/tipsandtrickscontainer
+        image-name: ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
+        severity-threshold: CRITICAL
+        run-quality-checks: true
+
     
     - uses: Azure/docker-login@v1
       with:
@@ -21,10 +24,3 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: docker push containerscandemo.azurecr.io/tipsandtrickscontainer       
-
-    - name: Scan image
-      uses: Azure/container-scan@v0
-      with:
-        image-name: ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }}
-        severity-threshold: CRITICAL
-        run-quality-checks: true
