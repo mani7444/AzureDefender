@@ -15,7 +15,7 @@ jobs:
   
     - name: Build and Tag image
       run: |
-        docker build -f ./Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer:${{ github.run_number }} .
+        docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/tipsandtrickscontainer -f ./Dockerfile.txt .
         
 
     - name: Scan image
